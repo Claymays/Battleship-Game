@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Cell {
     public int row;
     public int col;
-    CellStatus status;
+    public CellStatus status;
     GameStatus shipName;
     public Rectangle bounds;
     public final static float size = 40;

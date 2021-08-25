@@ -3,6 +3,7 @@ package com.badlogic.drop;
 import battleship.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -38,9 +39,7 @@ public class ShipGraphics extends ApplicationAdapter {
 
 
 	Vector3 mousePos = new Vector3();
-	Board2 board = new Board2();
 
-	SetShips set = new SetShips();
 
 	BattleShip playerBoard = new BattleShip();
 	BattleShip fogBoard1 = new BattleShip();
@@ -72,21 +71,52 @@ public class ShipGraphics extends ApplicationAdapter {
 
 
 	}
+	public void update() {
 
+		// process user input
+		mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		camera.unproject(mousePos);
+
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+			for (int x = 0; x < playerBoard.board.board.length; x++) {
+				for (int y = 0; y < playerBoard.board.board.length; y++) {
+					Cell cell = playerBoard.board.getCell(y, x);
+					if (cell.bounds.contains(mousePos.x, mousePos.y)) {
+						if (cell.status == CellStatus.FOG) {
+							cell.status = CellStatus.HIT;
+						} else if (cell.status == CellStatus.HIT) {
+							cell.status = CellStatus.SHIP;
+						} else if (cell.status == CellStatus.SHIP) {
+							cell.status = CellStatus.MISS;
+						} else if (cell.status == CellStatus.MISS) {
+							cell.status = CellStatus.FOG;
+						}
+					}
+				}
+			}
+		}
+
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+			if (playerBoard.getStatus() == GameStatus.HO_AIRCRAFT) {
+				playerBoard.setStatus(GameStatus.AIRCRAFT);
+			} else {
+				playerBoard.setStatus(GameStatus.HO_AIRCRAFT);
+			}
+		}
+		camera.update();
+	}
 	@Override
 	public void render() {
+		update();
 		// clear the screen with a dark blue color. The
 		// arguments to clear are the red, green
 		// blue and alpha component in the range [0,1]
 		// of the color to be used to clear the screen.
 		ScreenUtils.clear(0.1f, 0, 0, 1);
 
-		// tell the camera to update its matrices.
-		camera.update();
 
-		// process user input
-		mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		camera.unproject(mousePos);
+		// tell the camera to update its matrices.
+
 
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
@@ -96,28 +126,26 @@ public class ShipGraphics extends ApplicationAdapter {
 		// all drops
 		batch.begin();
 
-		for (int x = 0; x < board.board.length; x++) {
-			for (int y = 0; y < board.board[0].length; y++) {
-				Cell cell = board.getCell(y, x);
+		for (int x = 0; x < playerBoard.board.board.length; x++) {
+			for (int y = 0; y < playerBoard.board.board[0].length; y++) {
+				Cell cell = playerBoard.board.getCell(y, x);
+				switch (cell.status) {
+					case FOG:  batch.setColor(Color.GRAY); break;
+					case SHIP: batch.setColor(Color.GOLD); break;
+					case HIT: batch.setColor(Color.RED); break;
+					case MISS: batch.setColor(Color.BROWN); break;
+				}
 				if (cell.bounds.contains(mousePos.x, mousePos.y)) {
-					batch.setColor(Color.GREEN);
-				}
-
-				if (Gdx.input.isButtonJustPressed(1)) {
-					if (playerBoard.getStatus() == GameStatus.HO_AIRCRAFT) {
-						playerBoard.setStatus(GameStatus.AIRCRAFT);
-					} else {
-						playerBoard.setStatus(GameStatus.HO_AIRCRAFT);
-					}
-				}
-				if (playerBoard.getStatus() == GameStatus.HO_AIRCRAFT) {
-					batch.draw(hoCarrier, mousePos.x - 99, mousePos.y - 20, 198, 36 );
-				} else if (playerBoard.getStatus() == AIRCRAFT) {
-					batch.draw(carrier, mousePos.x - 20, mousePos.y - 99, 36, 198);
+					batch.setColor(0, 0, 1, 0.1f);
 				}
 				batch.draw(cellCube, cell.bounds.x, cell.bounds.y, cell.bounds.width, cell.bounds.height);
 				batch.setColor(Color.WHITE);
 			}
+		}
+		if (playerBoard.getStatus() == GameStatus.HO_AIRCRAFT) {
+			batch.draw(hoCarrier, mousePos.x - 99, mousePos.y - 20, 198, 36 );
+		} else if (playerBoard.getStatus() == AIRCRAFT) {
+			batch.draw(carrier, mousePos.x - 20, mousePos.y - 99, 36, 198);
 		}
 //		float size = cellCube.getRegionWidth();
 //		for (int y = 0; y < 10; y++) {
@@ -128,7 +156,6 @@ public class ShipGraphics extends ApplicationAdapter {
 //			}
 //		}
 		batch.end();
-
 
 
 
