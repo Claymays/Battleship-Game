@@ -5,9 +5,14 @@ public enum GameStatus {
     ,AIRCRAFT
     ,HO_AIRCRAFT
     ,BATTLESHIP
+    ,HO_BATTLESHIP
     ,SUBMARINE
+    ,HO_SUBMARINE
     ,CRUISER
+    ,HO_CRUISER
     ,DESTROYER
+    ,HO_DESTROYER
     ,SHOOT
-    ,END
+    ,AI_SET
+    ,AI_SHOOT
 }

@@ -6,7 +6,7 @@ public class Cell {
     public int row;
     public int col;
     public CellStatus status;
-    GameStatus shipName;
+    public GameStatus shipName;
     public Rectangle bounds;
     public final static float size = 40;
 

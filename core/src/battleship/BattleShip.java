@@ -1,9 +1,8 @@
 package battleship;
 
 public class BattleShip {
-
     public Board2 board = new Board2();
-    private GameStatus status = GameStatus.STARTED;
+    public GameStatus status = GameStatus.AIRCRAFT;
 
     public GameStatus getStatus() {
         return status;
@@ -14,28 +13,6 @@ public class BattleShip {
     }
 
 
-    public void showMessage(GameStatus status) {
-        String message = "";
-        switch (status) {
-            case AIRCRAFT:
-                message = "Place the Aircraft Carrier (5 cells):\n";
-                break;
-            case BATTLESHIP:
-                message = "Place the Battleship (4 cells):\n";
-                break;
-            case SUBMARINE:
-                message = "Place the Submarine (3 cells):\n";
-                break;
-            case CRUISER:
-                message = "Place the Cruiser (3 cells):\n";
-                break;
-            case DESTROYER:
-                message = "Place the Destroyer (2 cells):\n";
-                break;
-            default:
-        }
-        System.out.println(message);
-    }
 
     public int getSizeOfShip(GameStatus status) {
         int size = 0;
@@ -67,7 +44,7 @@ public class BattleShip {
         return Math.abs(start.row - end.row) + 1 == size || Math.abs(start.col - end.col) + 1 == size;
     }
 
-    boolean checkNear(Cell start, Cell end) {
+    public boolean checkNear(Cell start, Cell end) {
         if (start.row == end.row) {
             for (int i = start.col; i <= end.col; i++) {
                 Cell upperRowCell = board.getCell(start.row - 1, i);
@@ -127,10 +104,10 @@ public class BattleShip {
         return true;
     }
 
-    public boolean setBoard(GameStatus status, String startCell, String endCell) {
+    public boolean setBoard(GameStatus status, Cell startCell, Cell endCell) {
         int size = getSizeOfShip(status);
-        Cell start = board.getCell(startCell);
-        Cell end = board.getCell(endCell);
+        Cell start = startCell;
+        Cell end = endCell;
 
         if (!start.isSmallerThan(end)) {
             Cell tmp = start;
@@ -139,27 +116,22 @@ public class BattleShip {
         }
 
         if (start == null || end == null) {
-            System.out.println("Error! Invalid Cell");
             return false;
         }
 
         if (!checkLocation(start, end)) {
-            System.out.println("Error! Wrong ship location! Try again:");
             return false;
         }
 
         if (!checkShipLength(size, start, end)) {
-            System.out.println("Error! Wrong length of the " + status + "! Try again:");
             return false;
         }
 
         if (!checkNear(start, end)) {
-            System.out.println("Error! You placed it too close to another one. Try again:");
             return false;
         }
 
         if(!setShip(start, end, status)) {
-            System.out.println("Error! Try again:");
             return false;
         }
 
