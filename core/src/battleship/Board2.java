@@ -1,13 +1,13 @@
 package battleship;
 
 public class Board2 {
-    public Cell[][] board;
+    public Cell[][] cells;
     public GameStatus player = GameStatus.STARTED;
     public Board2() {
-        board = new Cell[10][10];
+        cells = new Cell[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                board[i][j] = new Cell(i, j, CellStatus.FOG, player);
+                cells[i][j] = new Cell(i, j, CellStatus.FOG, player);
             }
         }
     }
@@ -17,7 +17,7 @@ public class Board2 {
             return null;
         }
 
-        return board[row][col];
+        return cells[row][col];
     }
 
     public boolean setCell(CellStatus status, int row, int col, GameStatus ship) {
@@ -25,8 +25,8 @@ public class Board2 {
             return false;
         }
 
-        board[row][col].status = status;
-        board[row][col].shipName = ship;
+        cells[row][col].status = status;
+        cells[row][col].shipName = ship;
         return true;
     }
 }

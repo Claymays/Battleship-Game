@@ -1,6 +1,6 @@
 package com.mygdx.game.desktop;
 
-import battleship.GameLoop;
+
 import com.badlogic.drop.ShipGraphics;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;

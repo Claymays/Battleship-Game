@@ -18,16 +18,21 @@ public class BattleShip {
         int size = 0;
         switch (status) {
             case AIRCRAFT:
+            case HO_AIRCRAFT:
                 size = 5;
                 break;
             case BATTLESHIP:
+            case HO_BATTLESHIP:
                 size = 4;
                 break;
             case SUBMARINE:
             case CRUISER:
+            case HO_CRUISER:
+            case HO_SUBMARINE:
                 size = 3;
                 break;
             case DESTROYER:
+            case HO_DESTROYER:
                 size = 2;
                 break;
             default:

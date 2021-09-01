@@ -51,9 +51,10 @@ public class ShipGraphics extends ApplicationAdapter {
 
 
 	BattleShip playerBoard = new BattleShip();
-	BattleShip AI_board = new BattleShip();
+	BattleShip AI_board;
 	BattleShip fogBoard1 = new BattleShip();
 	Random random = new Random();
+
 	int min = 0;
 	int max = 9;
 	@Override
@@ -74,6 +75,14 @@ public class ShipGraphics extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 400, 800);
 		batch = new SpriteBatch();
+		AI_board = new BattleShip();
+		for (int i = 0; i < 100; i++) {
+			int x = i / 10;
+			int y = i % 10;
+			Cell cell = AI_board.board.getCell(x, y);
+			cell.bounds.y += 400;
+		}
+
 
 
 
@@ -86,8 +95,8 @@ public class ShipGraphics extends ApplicationAdapter {
 
 
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-				for (int x = 0; x < playerBoard.board.board.length; x++) {
-					for (int y = 0; y < playerBoard.board.board.length; y++) {
+				for (int x = 0; x < playerBoard.board.cells.length; x++) {
+					for (int y = 0; y < playerBoard.board.cells.length; y++) {
 						Cell cell = playerBoard.board.getCell(y, x);
 						if (cell.bounds.contains(mousePos.x, mousePos.y)) {
 							switch (playerBoard.getStatus()) {
@@ -175,8 +184,8 @@ public class ShipGraphics extends ApplicationAdapter {
 		// all drops
 		batch.begin();
 
-		for (int x = 0; x < playerBoard.board.board.length; x++) {
-			for (int y = 0; y < playerBoard.board.board[0].length; y++) {
+		for (int x = 0; x < playerBoard.board.cells.length; x++) {
+			for (int y = 0; y < playerBoard.board.cells[0].length; y++) {
 				Cell cell = playerBoard.board.getCell(y, x);
 				switch (cell.status) {
 					case FOG:  batch.setColor(Color.GRAY); break;
@@ -191,10 +200,9 @@ public class ShipGraphics extends ApplicationAdapter {
 				batch.setColor(Color.WHITE);
 			}
 		}
-		for (int x = 0; x < AI_board.board.board.length; x++) {
-			for (int y = 0; y < AI_board.board.board[0].length; y++) {
+		for (int x = 0; x < AI_board.board.cells.length; x++) {
+			for (int y = 0; y < AI_board.board.cells[0].length; y++) {
 				Cell cell = AI_board.board.getCell(y, x);
-				cell.bounds.y += 10;
 				switch (cell.status) {
 					case FOG:  batch.setColor(Color.GRAY); break;
 					case SHIP: batch.setColor(Color.GOLD); break;
