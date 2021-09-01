@@ -95,42 +95,116 @@ public class ShipGraphics extends ApplicationAdapter {
 
 
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+			if (playerBoard.getStatus() != SHOOT) {
 				for (int x = 0; x < playerBoard.board.cells.length; x++) {
 					for (int y = 0; y < playerBoard.board.cells.length; y++) {
 						Cell cell = playerBoard.board.getCell(y, x);
 						if (cell.bounds.contains(mousePos.x, mousePos.y)) {
 							switch (playerBoard.getStatus()) {
-								case STARTED: playerBoard.setStatus(AIRCRAFT); break;
-								case AIRCRAFT: if (playerBoard.setBoard(AIRCRAFT, playerBoard.board.getCell(y - 2, x), playerBoard.board.getCell(y + 2, x))) {playerBoard.setStatus(BATTLESHIP); carrierPosition = cell.bounds;} break;
-								case HO_AIRCRAFT: if (playerBoard.setBoard(HO_AIRCRAFT, playerBoard.board.getCell(y, x - 2), playerBoard.board.getCell(y, x + 2))) {playerBoard.setStatus(BATTLESHIP); hoCarrierPosition = cell.bounds;} break;
-								case BATTLESHIP: if (playerBoard.setBoard(BATTLESHIP, playerBoard.board.getCell(y - 1, x), playerBoard.board.getCell(y + 2, x))) {playerBoard.setStatus(CRUISER); battleshipPosition = cell.bounds;} break;
-								case HO_BATTLESHIP: if (playerBoard.setBoard(HO_BATTLESHIP, playerBoard.board.getCell(y, x - 1), playerBoard.board.getCell(y, x + 2)))  {playerBoard.setStatus(CRUISER); hoBattleshipPosition = cell.bounds;} break;
-								case CRUISER: if (playerBoard.setBoard(CRUISER, playerBoard.board.getCell(y - 1, x), playerBoard.board.getCell(y + 1, x))) {playerBoard.setStatus(SUBMARINE); cruiserPosition = cell.bounds;} break;
-								case HO_CRUISER: if (playerBoard.setBoard(HO_CRUISER, playerBoard.board.getCell(y, x - 1), playerBoard.board.getCell(y, x + 1)))  {playerBoard.setStatus(SUBMARINE); hoCruiserPosition = cell.bounds;} break;
-								case SUBMARINE: if(playerBoard.setBoard(SUBMARINE, playerBoard.board.getCell(y - 1, x), playerBoard.board.getCell(y + 1, x))) {playerBoard.setStatus(DESTROYER); submarinePosition = cell.bounds;} break;
-								case HO_SUBMARINE: if(playerBoard.setBoard(HO_SUBMARINE, playerBoard.board.getCell(y, x - 1), playerBoard.board.getCell(y, x + 1))) {playerBoard.setStatus(DESTROYER); hoSubmarinePosition = cell.bounds;} break;
-								case DESTROYER: if (playerBoard.setBoard(DESTROYER, playerBoard.board.getCell(y, x), playerBoard.board.getCell(y + 1, x))) {playerBoard.setStatus(AI_SET); destroyerPosition = cell.bounds;} break;
-								case HO_DESTROYER: if(playerBoard.setBoard(HO_DESTROYER, playerBoard.board.getCell(y, x), playerBoard.board.getCell(y, x +1))) {playerBoard.setStatus(AI_SET);hoDestroyerPosition = cell.bounds;} break;
-								case SHOOT: { /* do something */}
+								case STARTED:
+									playerBoard.setStatus(AIRCRAFT);
+									break;
+								case AIRCRAFT:
+									if (playerBoard.setBoard(AIRCRAFT, playerBoard.board.getCell(y - 2, x), playerBoard.board.getCell(y + 2, x))) {
+										playerBoard.setStatus(BATTLESHIP);
+										carrierPosition = cell.bounds;
+									}
+									break;
+								case HO_AIRCRAFT:
+									if (playerBoard.setBoard(HO_AIRCRAFT, playerBoard.board.getCell(y, x - 2), playerBoard.board.getCell(y, x + 2))) {
+										playerBoard.setStatus(BATTLESHIP);
+										hoCarrierPosition = cell.bounds;
+									}
+									break;
+								case BATTLESHIP:
+									if (playerBoard.setBoard(BATTLESHIP, playerBoard.board.getCell(y - 1, x), playerBoard.board.getCell(y + 2, x))) {
+										playerBoard.setStatus(CRUISER);
+										battleshipPosition = cell.bounds;
+									}
+									break;
+								case HO_BATTLESHIP:
+									if (playerBoard.setBoard(HO_BATTLESHIP, playerBoard.board.getCell(y, x - 1), playerBoard.board.getCell(y, x + 2))) {
+										playerBoard.setStatus(CRUISER);
+										hoBattleshipPosition = cell.bounds;
+									}
+									break;
+								case CRUISER:
+									if (playerBoard.setBoard(CRUISER, playerBoard.board.getCell(y - 1, x), playerBoard.board.getCell(y + 1, x))) {
+										playerBoard.setStatus(SUBMARINE);
+										cruiserPosition = cell.bounds;
+									}
+									break;
+								case HO_CRUISER:
+									if (playerBoard.setBoard(HO_CRUISER, playerBoard.board.getCell(y, x - 1), playerBoard.board.getCell(y, x + 1))) {
+										playerBoard.setStatus(SUBMARINE);
+										hoCruiserPosition = cell.bounds;
+									}
+									break;
+								case SUBMARINE:
+									if (playerBoard.setBoard(SUBMARINE, playerBoard.board.getCell(y - 1, x), playerBoard.board.getCell(y + 1, x))) {
+										playerBoard.setStatus(DESTROYER);
+										submarinePosition = cell.bounds;
+									}
+									break;
+								case HO_SUBMARINE:
+									if (playerBoard.setBoard(HO_SUBMARINE, playerBoard.board.getCell(y, x - 1), playerBoard.board.getCell(y, x + 1))) {
+										playerBoard.setStatus(DESTROYER);
+										hoSubmarinePosition = cell.bounds;
+									}
+									break;
+								case DESTROYER:
+									if (playerBoard.setBoard(DESTROYER, playerBoard.board.getCell(y, x), playerBoard.board.getCell(y + 1, x))) {
+										playerBoard.setStatus(AI_SET);
+										destroyerPosition = cell.bounds;
+									}
+									break;
+								case HO_DESTROYER:
+									if (playerBoard.setBoard(HO_DESTROYER, playerBoard.board.getCell(y, x), playerBoard.board.getCell(y, x + 1))) {
+										playerBoard.setStatus(AI_SET);
+										hoDestroyerPosition = cell.bounds;
+									}
+									break;
 							}
 						}
 					}
 				}
 			}
-			if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-				switch (playerBoard.getStatus()) {
-					case HO_AIRCRAFT: playerBoard.setStatus(GameStatus.AIRCRAFT); break;
-					case AIRCRAFT: playerBoard.setStatus(GameStatus.HO_AIRCRAFT); break;
-					case HO_BATTLESHIP: playerBoard.setStatus(BATTLESHIP); break;
-					case BATTLESHIP: playerBoard.setStatus(HO_BATTLESHIP); break;
-					case HO_CRUISER: playerBoard.setStatus(CRUISER); break;
-					case CRUISER: playerBoard.setStatus(HO_CRUISER); break;
-					case HO_SUBMARINE: playerBoard.setStatus(SUBMARINE); break;
-					case SUBMARINE: playerBoard.setStatus(HO_SUBMARINE); break;
-					case DESTROYER: playerBoard.setStatus(HO_DESTROYER); break;
-					case HO_DESTROYER: playerBoard.setStatus(DESTROYER); break;
+			else {
+				// playerBoard.status is SHOOT
+				for (int x = 0; x < AI_board.board.cells.length; x++) {
+					for (int y = 0; y < AI_board.board.cells.length; y++) {
+						Cell cell = AI_board.board.getCell(y, x);
+						if (cell.bounds.contains(mousePos.x, mousePos.y)) {
+							switch (cell.status) {
+								case FOG:
+									cell.status = CellStatus.MISS;
+									break;
+								case SHIP:
+									cell.status = CellStatus.HIT;
+									break;
+							}
+						}
+					}
 				}
+				playerBoard.setStatus(AI_SHOOT);
 			}
+		}
+		
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+			switch (playerBoard.getStatus()) {
+				case HO_AIRCRAFT: playerBoard.setStatus(GameStatus.AIRCRAFT); break;
+				case AIRCRAFT: playerBoard.setStatus(GameStatus.HO_AIRCRAFT); break;
+				case HO_BATTLESHIP: playerBoard.setStatus(BATTLESHIP); break;
+				case BATTLESHIP: playerBoard.setStatus(HO_BATTLESHIP); break;
+				case HO_CRUISER: playerBoard.setStatus(CRUISER); break;
+				case CRUISER: playerBoard.setStatus(HO_CRUISER); break;
+				case HO_SUBMARINE: playerBoard.setStatus(SUBMARINE); break;
+				case SUBMARINE: playerBoard.setStatus(HO_SUBMARINE); break;
+				case DESTROYER: playerBoard.setStatus(HO_DESTROYER); break;
+				case HO_DESTROYER: playerBoard.setStatus(DESTROYER); break;
+			}
+		}
+		
 		while (playerBoard.getStatus() == AI_SET) {
 			boolean rowOrCol = random.nextBoolean();
 			int xORy = random.nextInt(10);
@@ -159,6 +233,18 @@ public class ShipGraphics extends ApplicationAdapter {
 						case DESTROYER: AI_board.setStatus(SHOOT); Gdx.app.log("message", "Success!"); playerBoard.setStatus(SHOOT); break;
 					}
 				}
+			}
+		}
+		while (playerBoard.getStatus() == AI_SHOOT) {
+			int x = random.nextInt(10);
+			int y = random.nextInt(10);
+			Cell cell = playerBoard.board.getCell(x, y);
+			switch (cell.status) {
+				case FOG: cell.status = CellStatus.MISS; playerBoard.setStatus(SHOOT); break;
+				case MISS:
+				case HIT:
+					playerBoard.setStatus(SHOOT); break;
+				case SHIP: cell.status = CellStatus.HIT; playerBoard.setStatus(SHOOT); break;
 			}
 		}
 		camera.update();
